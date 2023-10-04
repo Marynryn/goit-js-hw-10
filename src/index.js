@@ -8,7 +8,7 @@ import "slim-select/dist/slimselect.css";
   const error = document.querySelector('.error');
   const catInfo = document.querySelector('.cat-info');
   
-  
+  catInfo.style.display = 'none'
   error.style.display = 'none';
   selectB.style.display = 'none';
   
@@ -43,7 +43,7 @@ import "slim-select/dist/slimselect.css";
   
     fetchCat(selectedBreedId)
       .then(catData => {
-       
+        catInfo.style.display = 'block'
         catInfo.innerHTML = `
         
                   <h1>${catData.breeds[0].name}</h1>
