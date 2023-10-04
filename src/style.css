@@ -15,11 +15,11 @@ body {
 img {
     display: block;
     max-width: 100%;
-    border: 1px solid #0d161b;
+    
 }
 
 h1 {
-    font-size: 12px;
+    font-size: 24px;
     margin: 0;
 }
 .breed-select {
@@ -41,14 +41,21 @@ h1 {
 }
 
 .loader {
-    font-size: 0;
+    font-size: 20px;
     position: relative;
     margin: 20% auto;
     width: 250px;
     display: flex;
     justify-content: space-between;
 }
-
+.error{
+    font-size: 20px;
+    display: flex;
+    justify-content: space-between;
+    margin:10% auto;
+    position: relative;
+    color: red;
+}
 
 
 
@@ -61,14 +68,5 @@ h1 {
     flex-wrap: wrap;
     gap: 40px;
     background-color: #e5f3f2;
-    border: 1px solid #0d161b;
-}
-
-.box-img {
-   
-    align-items: center;
-}
-
-.box {
-   
+  
 }
