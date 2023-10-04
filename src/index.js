@@ -1,77 +1,71 @@
-import axios from "axios";
+
 import {fetchBreeds, fetchCat} from "./cat-api";
 import SlimSelect from "slim-select"
 import "slim-select/dist/slimselect.css";
 
-axios.defaults.headers.common["x-api-key"] = "live_6DBiWVL9DHfF5BZnITX5cCuCapUWVEpbp0P2bYTHVfPtiSsFF5soMqmHIGMOautM";
-
-
-
- const refs = {
-    info: document.querySelector(".cat-info"),
-    selectB: document.querySelector(".breed-select"),
-    errorMes: document.querySelector(".error"),
-    loadMes:document.querySelector(".loader")
-};
-
-refs.loadMes.classList.replace('loader', 'is-hidden');
-refs.errorMes.classList.add('is-hidden');
-refs.info.classList.add('is-hidden');
-
-
-let arrBreeds = [];
-fetchBreeds()
-.then(data => {
-    data.forEach(element => {
-        arrBreeds.push({text: element.name, value: element.id});
-    });
-    new SlimSelect({
-        select: refs.selectB,
-        data: arrBreeds,
-    });
-    })
-.catch(onFetchError);
-
-let firstBreed = true
-refs.selectB.addEventListener("change", onSelectBreed);
-
-function onSelectBreed(event){
-    refs.loadMes.classList.replace('is-hidden', 'loader');
-    refs.selectB.classList.add('is-hidden');
-    refs.info.classList.add('is-hidden');
-if(!firstBreed){
-    infoCat();}
-else {
-    firstBreed = false;
-}
-}
-function infoCat(){
-    const breedId = refs.selectB.value;
-
-    fetchCat(breedId)
-    .then(data =>{
-        refs.info.insertAdjacentHTML("beforeend", createMarkup(data));
-        refs.info.classList.remove('is-hidden');}
-    )
-    .catch(onFetchError);
-
-}
-
-function onFetchError(error) {
-    refs.selectB.classList.remove('is-hidden');
-    refs.loadMes.classList.replace('loader', 'is-hidden');}
-
-function createMarkup(arr) {
-    return  arr.map(({url, breeds}) =>`
-      <li class="cat-card">
-        <img src="${url}" alt="${breeds[0].name}">
-        <div class="about-cat">
-          <h2>${breeds[0].name}</h2>
-          <p>Description: ${breeds[0].description}</p>
-          <p>Temperament: ${breeds[0].temperament}</p>
-        </div>
-      </li>
-      `)
-      .join("");
+  const selectB = document.querySelector('.breed-select');
+  const loader = document.querySelector('.loader');
+  const error = document.querySelector('.error');
+  const catInfo = document.querySelector('.cat-info');
+  
+  
+  error.style.display = 'none';
+  selectB.style.display = 'none';
+  
+  window.addEventListener('load', () => {
+    fetchBreeds()
+      .then(breeds => {
+        selectB.style.display = 'block'
+       
+        loader.style.display = 'none';
+  
+       
+        breeds.forEach(breed => {
+            
+            const option = document.createElement('option');
+            option.value = breed.id;
+            option.textContent = breed.name;
+            breedSelect.appendChild(option);
+          });
+       
+      })
+      .catch(error => {
+      
+        showError();
+        loader.hidden = true;
+        error.hidden = false;
+      });
+  });
+  
+  selectB.addEventListener('change', () => {
+    catInfo.innerHTML = "";
+    const selectedBreedId = selectB.value;
+    
+  
+    fetchCat(selectedBreedId)
+      .then(catData => {
+       
+        catInfo.innerHTML = `
+        
+                  <h1>${catData.breeds[0].name}</h1>
+                  <h2>Description:</h2>
+                  <p> ${catData.breeds[0].description}</p>
+                  <h2>Temperament:</h2>
+                  <p>${catData.breeds[0].temperament}</p>
+                  <img src="${catData.url}" alt="${catData.breeds[0].name}" width="300" />
+                  
+              `;
+      })
+      .catch(error => {
+       
+        showError();
+      })
+      .finally(() => {
+        loader.style.display = 'none'; 
+      });
+  });
+  
+ 
+  function showError() {
+    error.style.display = 'block';
   }
-

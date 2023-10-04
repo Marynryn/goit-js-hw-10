@@ -1,19 +1,39 @@
 import axios from "axios";
-axios.defaults.headers.common["x-api-key"] = "live_6DBiWVL9DHfF5BZnITX5cCuCapUWVEpbp0P2bYTHVfPtiSsFF5soMqmHIGMOautM";
+const api_key = "live_6DBiWVL9DHfF5BZnITX5cCuCapUWVEpbp0P2bYTHVfPtiSsFF5soMqmHIGMOautM";
+const url = 'https://api.thecatapi.com/v1';
+
+  
 
 
-export function fetchBreeds(){
-const url = "https://api.thecatapi.com/v1/breeds";
-return axios.get(url).then(res => res.data);
-
+export async function fetchBreeds() {
+  try {
+    const response = await axios.get(`${url}/breeds`, {
+      headers: {
+        'x-api-key': api_key,
+      },
+    });
+    const breeds = response.data;
+    return breeds;
+  } catch (error) {
+    throw error;
+  }
 }
 
- export function fetchCat(breedId) {
-    const breedUrl = `https://api.thecatapi.com/v1/images/search?breed_ids=${breedId}`
-      return axios.get(breedUrl).then(res =>{
-        console.log(res.data[0]);
-        return res.data[0]
-      })
-       
+ 
+export async function fetchCat(breedId) {
+  try {
+    const response = await axios.get(
+      `${url}/images/search?breed_ids=${breedId}`,
+      {
+        headers: {
+          'x-api-key': api_key,
+        },
+      }
+    );
+    const catData = response.data[0];
+    return catData;
+  } catch (error) {
+    throw error;
+  }
 }
 
