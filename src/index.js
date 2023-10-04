@@ -10,13 +10,13 @@ import "slim-select/dist/slimselect.css";
   
   
   error.style.display = 'none';
-  
+  selectB.style.display = 'none';
   
   window.addEventListener('load', () => {
     fetchBreeds()
       .then(breeds => {
         
-       
+        selectB.style.display = 'block';
         loader.style.display = 'none';
   
        
@@ -51,7 +51,7 @@ import "slim-select/dist/slimselect.css";
                   <p> ${catData.breeds[0].description}</p>
                   <h2>Temperament:</h2>
                   <p>${catData.breeds[0].temperament}</p>
-                  <img src="${catData.url}" alt="${catData.breeds[0].name}" width="300" />
+                  <img src="${catData.url}" alt="${catData.breeds[0].name}" width="400" />
                   
               `;
       })

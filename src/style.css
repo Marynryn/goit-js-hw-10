@@ -53,7 +53,7 @@ h1 {
 
 
 .cat-info {
-    max-width: 1200px;
+    
     margin-top: 20px;
     padding: 20px;
     display: flex;
@@ -65,10 +65,10 @@ h1 {
 }
 
 .box-img {
-    display: flex;
+   
     align-items: center;
 }
 
 .box {
-    width: 400px;
+   
 }
