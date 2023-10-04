@@ -10,12 +10,12 @@ import "slim-select/dist/slimselect.css";
   
   
   error.style.display = 'none';
-  selectB.style.display = 'none';
+  
   
   window.addEventListener('load', () => {
     fetchBreeds()
       .then(breeds => {
-        selectB.style.display = 'block'
+        
        
         loader.style.display = 'none';
   
@@ -38,7 +38,6 @@ import "slim-select/dist/slimselect.css";
   });
   
   selectB.addEventListener('change', () => {
-    catInfo.innerHTML = "";
     const selectedBreedId = selectB.value;
     
   
