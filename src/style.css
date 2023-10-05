@@ -43,7 +43,7 @@ h1 {
 .loader {
     font-size: 20px;
     position: relative;
-    margin: 20% auto;
+    margin: 5% auto;
     width: 250px;
     display: flex;
     justify-content: space-between;

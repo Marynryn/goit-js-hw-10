@@ -12,59 +12,94 @@ const ref = {
     error: document.querySelector('.error'),
 };
 const { selector, divCatInfo, loader, error } = ref;
+window.addEventListener("load", getBreeds);
 
-loader.classList.replace('loader', 'is-hidden');
-error.style.display = "none"
 divCatInfo.classList.add('is-hidden');
+error.style.display = "none"
 
-let arrBreedsId = [];
+
+onLoad()
+
+
+function getBreeds (){
+      
+  
 fetchBreeds()
-.then(data => {
-    data.forEach(element => {
-        arrBreedsId.push({text: element.name, value: element.id});
-    });
+.then(data => createScroll(data))
+.catch(onFetchError)
+.finally( onLoad)
+
+}
+let arrBreedsId =[]
+ function createScroll (data)
+{ 
+ data.map(({name, id})=> (arrBreedsId.push({ text:name, value:id})));
+ scroll(arrBreedsId)
+ onLoad()
+}
+
+function scroll (arrBreedsId){
     new SlimSelect({
         select: selector,
         data: arrBreedsId
     });
-    })
-.catch(onFetchError);
+    }
+
 
 selector.addEventListener('change', onSelectBreed);
-
+let firstChange = true;
 function onSelectBreed(event) {
-    loader.classList.replace('is-hidden', 'loader');
-    selector.classList.add('is-hidden');
-    divCatInfo.classList.add('is-hidden');
+    
+if (!firstChange){
+    createInfo();
+} else {
+    firstChange = false;
+}}
 
-    const breedId = event.currentTarget.value;
+   function createInfo(){
+   
+    const breedId = selector.value;
+   
     fetchCatByBreed(breedId)
     .then(data => {
-        loader.classList.replace('loader', 'is-hidden');
-        selector.classList.remove('is-hidden');
-        const { url, breeds } = data[0];
+       
         
-        divCatInfo.innerHTML = `<div class="box-img">
+        divCatInfo.innerHTML  = createMarkup(data);
+       
+        
+    })
+    .catch(onFetchError)
+    .finally( onLoad)
+};
+ function createMarkup(arr){
+    loader.classList.toggle('is-hidden');
+    divCatInfo.classList.remove('is-hidden');
+    return arr.map(({url, breeds}) =>
+    `<div class="box-img">
         <img src="${url}" alt="${breeds[0].name}" width="360"/>
         </div>
         <div class="box"><h1>${breeds[0].name}</h1>
         <p>${breeds[0].description}</p>
         <p><b>Temperament:</b> ${breeds[0].temperament}</p></div>`
-        divCatInfo.classList.remove('is-hidden');
-    })
-    .catch(onFetchError);
-};
-
+    )  
+  
+ 
+ }
 function onFetchError(error) {
-    selector.classList.remove('is-hidden');
-    loader.classList.replace('loader', 'is-hidden');
-
+    selector.classList.add('is-hidden');
+    loader.classList.add('is-hidden');
+   divCatInfo.classList.add('is-hidden');
+   
     Notify.failure('Oops! Something went wrong! Try reloading the page or select another cat breed!', {
         position: 'center-center',
-        timeout: 5000,
+        timeout: 2000,
         width: '400px',
         fontSize: '24px'
     });
 };
-   
+   function onLoad(){
+    loader.classList.toggle('is-hidden');
+  
+
+   }
 
